@@ -1,0 +1,33 @@
+# fly.toml per Next.js 14 (senza Docker, con Nixpacks)
+
+app = "mini-saas-template"
+primary_region = "ams"
+
+[build]
+  # Usa Nixpacks per il build automatico
+  builder = "nixpacks"
+
+[env]
+  PORT = "3000"
+  NODE_ENV = "production"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[http_service.checks]]
+  interval = "10s"
+  timeout = "2s"
+  grace_period = "5s"
+  method = "get"
+  path = "/"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256
+
